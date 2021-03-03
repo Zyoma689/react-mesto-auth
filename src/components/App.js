@@ -24,7 +24,7 @@ function App() {
     const [ cards, setCards ] = React.useState([]);
     const [ isLoading, setIsLoading ] = React.useState(false);
     const [ removedCard, setRemovedCard ] = React.useState({});
-    const [ loggedIn, setLoggedIn ] = React.useState(false);
+    const [ loggedIn, setLoggedIn ] = React.useState(true);
 
     React.useEffect(() => {
         Promise.all([api.getUserData(), api.getInitialCards()])
@@ -154,7 +154,9 @@ function App() {
       <CurrentUserContext.Provider value={currentUser}>
           <div className="page">
               <div className="page__container">
-                  <Header/>
+                  <Header
+                      loggedIn={loggedIn}
+                  />
                   <Switch>
                       <Route path="/sign-in">
                           <Login/>

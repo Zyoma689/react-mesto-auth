@@ -10,7 +10,7 @@ export default function Header(props) {
                 props.loggedIn && (
                     <Route exact path="/">
                         <div className="header__container">
-                            <p className="header__email">{props.userEmail}</p>
+                            <p className="header__email">obama@gmail.com</p>
                             <Link
                                 className="header__sign-out"
                                 to="/sign-in">Выйти
