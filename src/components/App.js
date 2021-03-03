@@ -1,5 +1,6 @@
 import React from 'react';
 import Header from "./Header.js";
+import Login from "./Login";
 import Main from "./Main.js";
 import Footer from "./Footer.js";
 import EditProfilePopup from "./EditProfilePopup.js";
@@ -150,16 +151,17 @@ function App() {
           <div className="page">
               <div className="page__container">
                   <Header/>
-                  <Main
-                      onEditProfile={handleEditProfileClick}
-                      onAddPlace={handleAddPlaceClick}
-                      onEditAvatar={handleEditAvatarClick}
-                      onCardClick={setSelectedCard}
-                      cards={cards}
-                      onCardLike={handleCardLike}
-                      onCardDelete={handleCardDeleteClick}
-                  />
-                  <Footer/>
+                  <Login/>
+                  {/*<Main*/}
+                  {/*    onEditProfile={handleEditProfileClick}*/}
+                  {/*    onAddPlace={handleAddPlaceClick}*/}
+                  {/*    onEditAvatar={handleEditAvatarClick}*/}
+                  {/*    onCardClick={setSelectedCard}*/}
+                  {/*    cards={cards}*/}
+                  {/*    onCardLike={handleCardLike}*/}
+                  {/*    onCardDelete={handleCardDeleteClick}*/}
+                  {/*/>*/}
+                  {/*<Footer/>*/}
 
                   <EditProfilePopup
                       isOpen={isEditProfilePopupOpen}
