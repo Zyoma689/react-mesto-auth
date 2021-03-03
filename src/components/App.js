@@ -1,6 +1,7 @@
 import React from 'react';
 import Header from "./Header.js";
 import Login from "./Login";
+import Register from "./Register";
 import Main from "./Main.js";
 import Footer from "./Footer.js";
 import EditProfilePopup from "./EditProfilePopup.js";
@@ -151,7 +152,8 @@ function App() {
           <div className="page">
               <div className="page__container">
                   <Header/>
-                  <Login/>
+                  {/*<Login/>*/}
+                  <Register/>
                   {/*<Main*/}
                   {/*    onEditProfile={handleEditProfileClick}*/}
                   {/*    onAddPlace={handleAddPlaceClick}*/}
