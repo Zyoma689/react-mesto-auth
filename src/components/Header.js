@@ -13,6 +13,7 @@ export default function Header(props) {
                             <p className="header__email">{props.email}</p>
                             <Link
                                 className="header__sign-out"
+                                onClick={props.onLogout}
                                 to="/sign-in">Выйти
                             </Link>
                         </div>

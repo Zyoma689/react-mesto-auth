@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Switch, Link, useHistory } from 'react-router-dom';
+import { Route, Switch, useHistory } from 'react-router-dom';
 import Header from "./Header.js";
 import Login from "./Login";
 import Register from "./Register";
@@ -88,6 +88,11 @@ function App() {
                     console.log(`Ошибка: ${err} - Пользователь с email не найден`)
                 }
             })
+    }
+    
+    function handleLogout() {
+        setLoggedIn(false);
+        setEmail('');
     }
 
 
@@ -209,7 +214,7 @@ function App() {
       <CurrentUserContext.Provider value={currentUser}>
           <div className="page">
               <div className="page__container">
-                  <Header loggedIn={loggedIn} email={email}/>
+                  <Header loggedIn={loggedIn} email={email} onLogout={handleLogout}/>
                   <Switch>
                       <Route path="/sign-in">
                           <Login onLogin={handleLogin}/>

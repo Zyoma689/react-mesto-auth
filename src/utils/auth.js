@@ -28,4 +28,4 @@ export const login = ({ email, password }) => {
         body: JSON.stringify({ password, email })
     })
         .then(getResponse)
-}
+};
