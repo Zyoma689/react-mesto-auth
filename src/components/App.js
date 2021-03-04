@@ -57,27 +57,6 @@ function App() {
                 })
         }
     }, [history]);
-    // function handleTokenCheck() {
-    //     const jwt = localStorage.getItem('token');
-    //     if (jwt) {
-    //         auth.checkToken(jwt)
-    //             .then((res) => {
-    //                 if (res.data) {
-    //                     setLoggedIn(true);
-    //                     setEmail(res.data.email);
-    //                     history.push('/');
-    //                 }
-    //             })
-    //             .catch((err) => {
-    //                 history.push('sign-in');
-    //                 if (err === 400) {
-    //                     console.log(`Ошибка: ${err} - Не передано одно из полей`)
-    //                 } else if (err === 401) {
-    //                     console.log(`Ошибка: ${err} - Пользователь с email не найден`)
-    //                 }
-    //             })
-    //     }
-    // }
 
     React.useEffect(() => {
         handleTokenCheck()
