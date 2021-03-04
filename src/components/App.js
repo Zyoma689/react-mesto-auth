@@ -15,6 +15,7 @@ import { CurrentUserContext } from "../contexts/CurrentUserContext.js";
 import api from "../utils/api.js";
 import successImage from "../images/Success.svg";
 import errorImage from "../images/Error.svg";
+import ProtectedRoute from "./ProtectedRoute";
 
 
 function App() {
@@ -22,7 +23,7 @@ function App() {
     const [ isAddPlacePopupOpen, setIsAddPlacePopupOpen ] = React.useState(false);
     const [ isEditAvatarPopupOpen, setIsEditAvatarPopupOpen ] = React.useState(false);
     const [ isConfirmPopupOpen, setIsConfirmPopupOpen ] = React.useState(false);
-    const [ isInfoTooltipOpen, setInfoTooltipOpen ] = React.useState(true);
+    const [ isInfoTooltipOpen, setInfoTooltipOpen ] = React.useState(false);
     const [ selectedCard, setSelectedCard ] = React.useState({});
     const [ currentUser, setCurrentUser] = React.useState({});
     const [ cards, setCards ] = React.useState([]);
@@ -161,9 +162,7 @@ function App() {
       <CurrentUserContext.Provider value={currentUser}>
           <div className="page">
               <div className="page__container">
-                  <Header
-                      loggedIn={loggedIn}
-                  />
+                  <Header loggedIn={loggedIn} />
                   <Switch>
                       <Route path="/sign-in">
                           <Login/>
@@ -173,19 +172,20 @@ function App() {
                           <Register/>
                       </Route>
 
-                      <Route exact path="/">
-                          <Main
-                              onEditProfile={handleEditProfileClick}
-                              onAddPlace={handleAddPlaceClick}
-                              onEditAvatar={handleEditAvatarClick}
-                              onCardClick={setSelectedCard}
-                              cards={cards}
-                              onCardLike={handleCardLike}
-                              onCardDelete={handleCardDeleteClick}
-                          />
-                          <Footer/>
-                      </Route>
+                      <ProtectedRoute
+                          exact path="/"
+                          component={Main}
+                          loggedIn={loggedIn}
+                          onEditProfile={handleEditProfileClick}
+                          onAddPlace={handleAddPlaceClick}
+                          onEditAvatar={handleEditAvatarClick}
+                          onCardClick={setSelectedCard}
+                          cards={cards}
+                          onCardLike={handleCardLike}
+                          onCardDelete={handleCardDeleteClick}
+                      />
                   </Switch>
+                  <Footer loggedIn={loggedIn} />
 
 
                   <EditProfilePopup
