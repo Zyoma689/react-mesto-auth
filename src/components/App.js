@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Switch, Link } from 'react-router-dom';
+import { Route, Switch, Link, useHistory } from 'react-router-dom';
 import Header from "./Header.js";
 import Login from "./Login";
 import Register from "./Register";
@@ -16,6 +16,7 @@ import api from "../utils/api.js";
 import successImage from "../images/Success.svg";
 import errorImage from "../images/Error.svg";
 import ProtectedRoute from "./ProtectedRoute";
+import * as auth from "../utils/auth.js";
 
 
 function App() {
@@ -29,9 +30,11 @@ function App() {
     const [ cards, setCards ] = React.useState([]);
     const [ isLoading, setIsLoading ] = React.useState(false);
     const [ removedCard, setRemovedCard ] = React.useState({});
-    const [ loggedIn, setLoggedIn ] = React.useState(true);
-    const [ status, setStatus ] = React.useState('Вы успешно зарегистрировались!');
-    const [ infoTooltipImage, setInfoTooltipImage ] = React.useState(successImage);
+    const [ loggedIn, setLoggedIn ] = React.useState(false);
+    const [ status, setStatus ] = React.useState('');
+    const [ infoTooltipImage, setInfoTooltipImage ] = React.useState('');
+    const [ email, setEmail ] = React.useState('');
+    const history = useHistory();
 
     React.useEffect(() => {
         Promise.all([api.getUserData(), api.getInitialCards()])
@@ -44,6 +47,48 @@ function App() {
                 console.log(err)
             });
     }, []);
+
+    function handleRegister(data) {
+        auth.register(data)
+            .then((res) => {
+                if (res.data.email) {
+                    history.push('/sign-in');
+                    setStatus('Вы успешно зарегистрировались!');
+                    setInfoTooltipImage(successImage);
+                    setInfoTooltipOpen(true);
+                }
+            })
+            .catch((err) => {
+                setStatus('Что-то пошло не так!\n' +
+                    'Попробуйте ещё раз.');
+                setInfoTooltipImage(errorImage);
+                setInfoTooltipOpen(true);
+                if (err === 400) {
+                    console.log(`Ошибка: ${err} - Некорректно заполнено одно из полей`)
+                }
+            })
+    }
+
+    function handleLogin(data) {
+        auth.login(data)
+            .then((res) => {
+                if (res.token) {
+                    setLoggedIn(true);
+                    setEmail(data.email);
+                    history.push('/');
+                }
+            })
+            .catch((err) => {
+                setStatus('Что-то пошло не так!\n' + 'Попробуйте ещё раз.');
+                setInfoTooltipImage(errorImage);
+                setInfoTooltipOpen(true);
+                if (err === 400) {
+                    console.log(`Ошибка: ${err} - Не передано одно из полей`)
+                } else if (err === 401) {
+                    console.log(`Ошибка: ${err} - Пользователь с email не найден`)
+                }
+            })
+    }
 
 
     function handleCardLike(card) {
@@ -95,7 +140,9 @@ function App() {
         setIsEditAvatarPopupOpen(false);
         setIsConfirmPopupOpen(false);
         setInfoTooltipOpen(false);
-        setSelectedCard({})
+        setSelectedCard({});
+        setInfoTooltipImage('');
+        setStatus('');
     }
 
     function handleEscClose(evt) {
@@ -162,14 +209,14 @@ function App() {
       <CurrentUserContext.Provider value={currentUser}>
           <div className="page">
               <div className="page__container">
-                  <Header loggedIn={loggedIn} />
+                  <Header loggedIn={loggedIn} email={email}/>
                   <Switch>
                       <Route path="/sign-in">
-                          <Login/>
+                          <Login onLogin={handleLogin}/>
                       </Route>
 
                       <Route path="/sign-up">
-                          <Register/>
+                          <Register onRegister={handleRegister}/>
                       </Route>
 
                       <ProtectedRoute
