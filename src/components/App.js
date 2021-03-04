@@ -36,6 +36,32 @@ function App() {
     const [ email, setEmail ] = React.useState('');
     const history = useHistory();
 
+    function handleTokenCheck() {
+        const jwt = localStorage.getItem('token');
+        if (jwt) {
+            auth.checkToken(jwt)
+                .then((res) => {
+                    if (res.data) {
+                        setLoggedIn(true);
+                        setEmail(res.data.email);
+                        history.push('/');
+                    }
+                })
+                .catch((err) => {
+                    history.push('sign-in');
+                    if (err === 400) {
+                        console.log(`Ошибка: ${err} - Не передано одно из полей`)
+                    } else if (err === 401) {
+                        console.log(`Ошибка: ${err} - Пользователь с email не найден`)
+                    }
+                })
+        }
+    }
+
+    React.useEffect(() => {
+        handleTokenCheck();
+    }, []);
+
     React.useEffect(() => {
         Promise.all([api.getUserData(), api.getInitialCards()])
             .then((values) => {
@@ -73,6 +99,7 @@ function App() {
         auth.login(data)
             .then((res) => {
                 if (res.token) {
+                    localStorage.setItem('token', res.token);
                     setLoggedIn(true);
                     setEmail(data.email);
                     history.push('/');
@@ -89,8 +116,9 @@ function App() {
                 }
             })
     }
-    
+
     function handleLogout() {
+        localStorage.removeItem('token');
         setLoggedIn(false);
         setEmail('');
     }

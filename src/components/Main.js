@@ -50,7 +50,6 @@ export default function Main(props) {
                             )
                         )
                     }
-
                 </ul>
             </section>
         </main>
