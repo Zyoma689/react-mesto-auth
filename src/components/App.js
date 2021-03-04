@@ -10,8 +10,11 @@ import EditAvatarPopup from "./EditAvatarPopup.js";
 import AddPlacePopup from "./AddPlacePopup.js";
 import ImagePopup from "./ImagePopup.js";
 import ConfirmPopup from "./ConfirmPopup.js";
+import InfoTooltip from "./InfoTooltip";
 import { CurrentUserContext } from "../contexts/CurrentUserContext.js";
 import api from "../utils/api.js";
+import successImage from "../images/Success.svg";
+import errorImage from "../images/Error.svg";
 
 
 function App() {
@@ -19,12 +22,15 @@ function App() {
     const [ isAddPlacePopupOpen, setIsAddPlacePopupOpen ] = React.useState(false);
     const [ isEditAvatarPopupOpen, setIsEditAvatarPopupOpen ] = React.useState(false);
     const [ isConfirmPopupOpen, setIsConfirmPopupOpen ] = React.useState(false);
+    const [ isInfoTooltipOpen, setInfoTooltipOpen ] = React.useState(true);
     const [ selectedCard, setSelectedCard ] = React.useState({});
     const [ currentUser, setCurrentUser] = React.useState({});
     const [ cards, setCards ] = React.useState([]);
     const [ isLoading, setIsLoading ] = React.useState(false);
     const [ removedCard, setRemovedCard ] = React.useState({});
     const [ loggedIn, setLoggedIn ] = React.useState(true);
+    const [ status, setStatus ] = React.useState('Вы успешно зарегистрировались!');
+    const [ infoTooltipImage, setInfoTooltipImage ] = React.useState(successImage);
 
     React.useEffect(() => {
         Promise.all([api.getUserData(), api.getInitialCards()])
@@ -87,6 +93,7 @@ function App() {
         setIsAddPlacePopupOpen(false);
         setIsEditAvatarPopupOpen(false);
         setIsConfirmPopupOpen(false);
+        setInfoTooltipOpen(false);
         setSelectedCard({})
     }
 
@@ -213,6 +220,13 @@ function App() {
                   <ImagePopup
                       card={selectedCard}
                       onClose={closeAllPopups}
+                  />
+
+                  <InfoTooltip
+                      isOpen={isInfoTooltipOpen}
+                      onClose={closeAllPopups}
+                      image={infoTooltipImage}
+                      title={status}
                   />
               </div>
           </div>
